@@ -6,7 +6,7 @@ import java.util.HashMap
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class DatabaseHelper {
+class DatabaseHelper<T> {
     suspend fun get(query: Query): DatabaseResult<DataSnapshot> = suspendCoroutine { coroutine ->
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
@@ -34,30 +34,20 @@ class DatabaseHelper {
         }
     }
 
-    suspend fun delete(path: String) = suspendCoroutine<DatabaseResult<Unit>> { coroutine ->
+    suspend fun delete(path: String) = suspendCoroutine<DatabaseResult<Boolean>> { coroutine ->
         val dataRef = FirebaseDatabase.getInstance().getReference(path)
         dataRef.removeValue().addOnSuccessListener {
-            coroutine.resume(DatabaseResult.success(Unit))
+            coroutine.resume(DatabaseResult.success(true))
         }.addOnFailureListener { e ->
             val message = e.message ?: ""
             coroutine.resume(DatabaseResult.failed(message))
         }
     }
 
-    suspend fun push(path: String, value: Any) = suspendCoroutine<DatabaseResult<String>> { coroutine ->
+    suspend fun push(path: String, value: T) = suspendCoroutine<DatabaseResult<String>> { coroutine ->
         val dataRef = FirebaseDatabase.getInstance().getReference(path).push()
         dataRef.setValue(value).addOnSuccessListener {
             coroutine.resume(DatabaseResult.success(dataRef.key))
-        }.addOnFailureListener { e ->
-            val message = e.message ?: ""
-            coroutine.resume(DatabaseResult.failed(message))
-        }
-    }
-
-    suspend fun post(path: String, value: Any) = suspendCoroutine<DatabaseResult<Unit>> { coroutine ->
-        val dataRef = FirebaseDatabase.getInstance().getReference(path)
-        dataRef.setValue(value).addOnSuccessListener {
-            coroutine.resume(DatabaseResult.success(Unit))
         }.addOnFailureListener { e ->
             val message = e.message ?: ""
             coroutine.resume(DatabaseResult.failed(message))

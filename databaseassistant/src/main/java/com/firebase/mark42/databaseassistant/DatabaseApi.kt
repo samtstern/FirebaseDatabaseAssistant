@@ -9,7 +9,7 @@ import java.util.HashMap
 class DatabaseApi<T> {
 
     suspend fun getFromDatabaseCache(path: String): DatabaseResult<DataSnapshot> {
-        val databaseResult = DatabaseHelper().get(path)
+        val databaseResult = DatabaseHelper<T>().get(path)
         if (databaseResult.value == null || !databaseResult.isSuccess()) {
             return DatabaseResult.failed(DatabaseResult.Error.DATABASE_REQUEST_FAILED.toString())
         }
@@ -18,42 +18,43 @@ class DatabaseApi<T> {
     }
 
     fun getFromDatabase(path: String): LiveData<DatabaseResult<DataSnapshot>> {
-        return DatabaseHelper().stream(path)
+        return DatabaseHelper<T>().stream(path = path)
     }
 
-    suspend fun pushToDatabase(path: String, t: T): DatabaseResult<Unit> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    suspend fun postToDatabase(path: String, t: T): DatabaseResult<Unit> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    suspend fun pushToDatabase(path: String, t: T): String? {
+        val key = DatabaseHelper<T>().push(path, t)
+        return key.value
     }
 
     suspend fun updateChildToDatabase(
         path: String,
-        childPath: String,
         value: Any
     ): DatabaseResult<Unit> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return DatabaseHelper<T>().updateChild(path, value)
     }
 
     suspend fun updateChildrenToDatabase(
         path: String,
         updates: HashMap<String, Any?>
     ): DatabaseResult<Unit> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return DatabaseHelper<T>().updateChildren(path, updates)
     }
 
-    suspend fun deleteFromDatabase(path: String): DatabaseResult<Unit> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    suspend fun deleteFromDatabase(path: String): DatabaseResult<Boolean> {
+        return DatabaseHelper<T>().delete(path)
     }
 
-    suspend fun getQueryFromDatabaseCache(query: Query): DatabaseResult<DataSnapshot?> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    suspend fun getQueryFromDatabaseCache(query: Query): DatabaseResult<DataSnapshot> {
+        val databaseResult = DatabaseHelper<T>().get(query)
+        if (databaseResult.value == null || !databaseResult.isSuccess()) {
+            return DatabaseResult.failed(DatabaseResult.Error.DATABASE_REQUEST_FAILED.toString())
+        }
+
+        return databaseResult
     }
 
-    fun getQueryFromDatabase(query: Query): LiveData<DataSnapshot?> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun getQueryFromDatabase(query: Query): LiveData<DatabaseResult<DataSnapshot>> {
+        return DatabaseHelper<T>().stream(query = query)
     }
 
     /*fun <T> convert(cls: Class<T>, snapShot: DataSnapshot): DatabaseResult<T?> {
