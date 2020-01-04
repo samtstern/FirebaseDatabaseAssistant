@@ -34,10 +34,10 @@ class DatabaseHelper<T> {
         }
     }
 
-    suspend fun delete(path: String) = suspendCoroutine<DatabaseResult<Boolean>> { coroutine ->
+    suspend fun delete(path: String) = suspendCoroutine<DatabaseResult<Unit>> { coroutine ->
         val dataRef = FirebaseDatabase.getInstance().getReference(path)
         dataRef.removeValue().addOnSuccessListener {
-            coroutine.resume(DatabaseResult.success(true))
+            coroutine.resume(DatabaseResult.success(Unit))
         }.addOnFailureListener { e ->
             val message = e.message ?: ""
             coroutine.resume(DatabaseResult.failed(message))

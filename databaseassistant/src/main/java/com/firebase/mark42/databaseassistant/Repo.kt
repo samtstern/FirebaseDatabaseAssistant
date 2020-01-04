@@ -8,12 +8,10 @@ import java.util.HashMap
 internal interface Repo<T> {
     suspend fun getFromDatabaseCache(path: String): T?
     fun getFromDatabase(path: String): LiveData<T?>
-    suspend fun pushToDatabase(path: String, t: T): DatabaseResult<Unit>
-    suspend fun postToDatabase(path: String, t: T): DatabaseResult<Unit>
-    fun convertDatabaseSnapshot(snapShot: DataSnapshot): DatabaseResult<T?>
-    suspend fun updateChildToDatabase(path: String, childPath: String, value: Any): DatabaseResult<Unit>
-    suspend fun updateChildrenToDatabase(path: String, updates: HashMap<String, Any?>): DatabaseResult<Unit>
-    suspend fun deleteFromDatabase(path: String): DatabaseResult<Unit>
-    suspend fun getQueryFromDatabaseCache(query: Query): DatabaseResult<T?>
+    suspend fun pushToDatabase(path: String, t: T): String?
+    suspend fun updateChildToDatabase(path: String, value: Any): Boolean
+    suspend fun updateChildrenToDatabase(path: String, updates: HashMap<String, Any?>): Boolean
+    suspend fun deleteFromDatabase(path: String): Boolean
+    suspend fun getQueryFromDatabaseCache(query: Query): T?
     fun getQueryFromDatabase(query: Query): LiveData<T?>
 }

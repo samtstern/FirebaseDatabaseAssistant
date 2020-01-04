@@ -16,12 +16,11 @@ class UserViewModel : ViewModel() {
         val email = activity.findViewById<TextView>(R.id.email)
         val userRepo = UserRepo.getInstance()
         viewModelScope.launch {
-            userRepo.getFromDatabase(UserRepo.path()).observe(activity, Observer { user ->
+            val user = userRepo.getFromDatabaseCache(UserRepo.path())
                 Log.v("model", user.toString())
                 fName.text = user?.firstName
                 lName.text = user?.lastName
                 email.text = user?.email
-            })
         }
     }
 }

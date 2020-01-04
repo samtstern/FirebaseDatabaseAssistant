@@ -29,43 +29,46 @@ abstract class DatabaseRepo<T>(): Repo<T> {
         return convertDatabaseSnapshot(result.value)
     }
 
-    override suspend fun postToDatabase(path: String, t: T): DatabaseResult<Unit> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override suspend fun pushToDatabase(path: String, t: T): DatabaseResult<Unit> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun convertDatabaseSnapshot(snapShot: DataSnapshot): DatabaseResult<T?> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun pushToDatabase(path: String, t: T): String? {
+        return api.pushToDatabase(path, t)
     }
 
     override suspend fun updateChildToDatabase(
         path: String,
-        childPath: String,
         value: Any
-    ): DatabaseResult<Unit> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    ): Boolean {
+        val result =  api.updateChildToDatabase(path, value)
+        return result.isSuccess()
     }
 
     override suspend fun updateChildrenToDatabase(
         path: String,
         updates: HashMap<String, Any?>
-    ): DatabaseResult<Unit> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    ): Boolean {
+        val result =  api.updateChildrenToDatabase(path, updates)
+        return result.isSuccess()
     }
 
-    override suspend fun deleteFromDatabase(path: String): DatabaseResult<Unit> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun deleteFromDatabase(path: String): Boolean {
+        val result =  api.deleteFromDatabase(path)
+        return result.isSuccess()
     }
 
-    override suspend fun getQueryFromDatabaseCache(query: Query): DatabaseResult<T?> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override suspend fun getQueryFromDatabaseCache(query: Query): T? {
+        val result = api.getQueryFromDatabaseCache(query)
+        return convertDatabaseSnapshot(result.value)
     }
 
     override fun getQueryFromDatabase(query: Query): LiveData<T?> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val result = api.getQueryFromDatabase(query)
+        val function = Function<DatabaseResult<DataSnapshot>, T> {
+            if (it.isSuccess()) {
+                convertDatabaseSnapshot(it.value)
+            } else {
+                null
+            }
+        }
+        return Transformations.map(result, function)
     }
 
     abstract fun convertDatabaseSnapshot(value: DataSnapshot?): T?

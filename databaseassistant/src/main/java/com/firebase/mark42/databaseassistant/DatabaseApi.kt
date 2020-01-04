@@ -40,7 +40,7 @@ class DatabaseApi<T> {
         return DatabaseHelper<T>().updateChildren(path, updates)
     }
 
-    suspend fun deleteFromDatabase(path: String): DatabaseResult<Boolean> {
+    suspend fun deleteFromDatabase(path: String): DatabaseResult<Unit> {
         return DatabaseHelper<T>().delete(path)
     }
 
