@@ -10,6 +10,7 @@ class DatabaseApi<T> {
 
     suspend fun getFromDatabaseCache(path: String): DatabaseResult<DataSnapshot> {
         val databaseResult = DatabaseHelper<T>().get(path)
+
         if (databaseResult.value == null || !databaseResult.isSuccess()) {
             return DatabaseResult.failed(DatabaseResult.Error.DATABASE_REQUEST_FAILED.toString())
         }
@@ -46,6 +47,7 @@ class DatabaseApi<T> {
 
     suspend fun getQueryFromDatabaseCache(query: Query): DatabaseResult<DataSnapshot> {
         val databaseResult = DatabaseHelper<T>().get(query)
+
         if (databaseResult.value == null || !databaseResult.isSuccess()) {
             return DatabaseResult.failed(DatabaseResult.Error.DATABASE_REQUEST_FAILED.toString())
         }
