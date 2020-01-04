@@ -16,7 +16,7 @@ abstract class DatabaseRepo<T>(): Repo<T> {
         return cached
     }
 
-    fun getFromDatabase(path: String) : LiveData<T> {
+    override fun getFromDatabase(path: String) : LiveData<T?> {
         val result = api.getFromDatabase(path)
         val function = Function<DatabaseResult<DataSnapshot>, T> {
             if (it.isSuccess()) {
@@ -33,7 +33,7 @@ abstract class DatabaseRepo<T>(): Repo<T> {
         return convertDatabaseSnapshot(result.value)
     }
 
-    override suspend fun postToDatabase(path: String, t: T): Boolean {
+    override suspend fun postToDatabase(path: String, t: T): DatabaseResult<Unit> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

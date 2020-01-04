@@ -7,14 +7,14 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class DatabaseHelper {
-    suspend fun get(query: Query): DatabaseResult<DataSnapshot> = suspendCoroutine { continuation ->
+    suspend fun get(query: Query): DatabaseResult<DataSnapshot> = suspendCoroutine { coroutine ->
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
-                continuation.resume(DatabaseResult.success(p0))
+                coroutine.resume(DatabaseResult.success(p0))
             }
 
             override fun onCancelled(error: DatabaseError) {
-                continuation.resume(DatabaseResult.failed(error.message))
+                coroutine.resume(DatabaseResult.failed(error.message))
             }
         })
     }
@@ -24,54 +24,54 @@ class DatabaseHelper {
         return get(dataRef)
     }
 
-    suspend fun updateChild(path: String, value: Any) = suspendCoroutine<DatabaseResult<Unit>> { continuation ->
+    suspend fun updateChild(path: String, value: Any) = suspendCoroutine<DatabaseResult<Unit>> { coroutine ->
         val dataRef = FirebaseDatabase.getInstance().getReference(path)
         dataRef.setValue(value).addOnSuccessListener {
-            continuation.resume(DatabaseResult.success(Unit))
+            coroutine.resume(DatabaseResult.success(Unit))
         }.addOnFailureListener { e ->
             val message = e.message ?: ""
-            continuation.resume(DatabaseResult.failed(message))
+            coroutine.resume(DatabaseResult.failed(message))
         }
     }
 
-    suspend fun delete(path: String) = suspendCoroutine<DatabaseResult<Unit>> { continuation ->
+    suspend fun delete(path: String) = suspendCoroutine<DatabaseResult<Unit>> { coroutine ->
         val dataRef = FirebaseDatabase.getInstance().getReference(path)
         dataRef.removeValue().addOnSuccessListener {
-            continuation.resume(DatabaseResult.success(Unit))
+            coroutine.resume(DatabaseResult.success(Unit))
         }.addOnFailureListener { e ->
             val message = e.message ?: ""
-            continuation.resume(DatabaseResult.failed(message))
+            coroutine.resume(DatabaseResult.failed(message))
         }
     }
 
-    suspend fun push(path: String, value: Any) = suspendCoroutine<DatabaseResult<String>> { continuation ->
+    suspend fun push(path: String, value: Any) = suspendCoroutine<DatabaseResult<String>> { coroutine ->
         val dataRef = FirebaseDatabase.getInstance().getReference(path).push()
         dataRef.setValue(value).addOnSuccessListener {
-            continuation.resume(DatabaseResult.success(dataRef.key))
+            coroutine.resume(DatabaseResult.success(dataRef.key))
         }.addOnFailureListener { e ->
             val message = e.message ?: ""
-            continuation.resume(DatabaseResult.failed(message))
+            coroutine.resume(DatabaseResult.failed(message))
         }
     }
 
-    suspend fun post(path: String, value: Any) = suspendCoroutine<DatabaseResult<Unit>> { continuation ->
+    suspend fun post(path: String, value: Any) = suspendCoroutine<DatabaseResult<Unit>> { coroutine ->
         val dataRef = FirebaseDatabase.getInstance().getReference(path)
         dataRef.setValue(value).addOnSuccessListener {
-            continuation.resume(DatabaseResult.success(Unit))
+            coroutine.resume(DatabaseResult.success(Unit))
         }.addOnFailureListener { e ->
             val message = e.message ?: ""
-            continuation.resume(DatabaseResult.failed(message))
+            coroutine.resume(DatabaseResult.failed(message))
         }
     }
 
     suspend fun updateChildren(path: String, updates: HashMap<String, Any?>) =
-        suspendCoroutine<DatabaseResult<Unit>> { continuation ->
+        suspendCoroutine<DatabaseResult<Unit>> { coroutine ->
             val dataRef = FirebaseDatabase.getInstance().getReference(path)
             dataRef.updateChildren(updates).addOnSuccessListener {
-                continuation.resume(DatabaseResult.success(Unit))
+                coroutine.resume(DatabaseResult.success(Unit))
             }.addOnFailureListener { e ->
                 val message = e.message ?: ""
-                continuation.resume(DatabaseResult.failed(message))
+                coroutine.resume(DatabaseResult.failed(message))
             }
         }
 
@@ -89,7 +89,7 @@ private class FirebaseQueryLiveData(val path: String? = null, val query: Query? 
                 query!!
             }
         }
-    private val listener = FirebaseValueListener()
+    private val listener = FirebaseValueEventListener()
 
     override fun onActive() {
         dataRef.addValueEventListener(listener)
@@ -101,7 +101,7 @@ private class FirebaseQueryLiveData(val path: String? = null, val query: Query? 
         super.onInactive()
     }
 
-    inner class FirebaseValueListener : ValueEventListener {
+    inner class FirebaseValueEventListener : ValueEventListener {
         override fun onCancelled(p0: DatabaseError) {
             value = DatabaseResult.failed(p0.message)
         }
