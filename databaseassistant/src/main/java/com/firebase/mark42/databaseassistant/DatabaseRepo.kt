@@ -1,6 +1,5 @@
 package com.firebase.mark42.databaseassistant
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.google.firebase.database.DataSnapshot
@@ -36,22 +35,19 @@ abstract class DatabaseRepo<T>(): Repo<T> {
     override suspend fun updateChildToDatabase(
         path: String,
         value: Any
-    ): Boolean {
-        val result =  api.updateChildToDatabase(path, value)
-        return result.isSuccess()
+    ): DatabaseResult<Unit> {
+        return api.updateChildToDatabase(path, value)
     }
 
     override suspend fun updateChildrenToDatabase(
         path: String,
         updates: HashMap<String, Any?>
-    ): Boolean {
-        val result =  api.updateChildrenToDatabase(path, updates)
-        return result.isSuccess()
+    ): DatabaseResult<Unit> {
+        return api.updateChildrenToDatabase(path, updates)
     }
 
-    override suspend fun deleteFromDatabase(path: String): Boolean {
-        val result =  api.deleteFromDatabase(path)
-        return result.isSuccess()
+    override suspend fun deleteFromDatabase(path: String): DatabaseResult<Unit> {
+        return api.deleteFromDatabase(path)
     }
 
     override suspend fun getQueryFromDatabaseCache(query: Query): T? {
