@@ -14,7 +14,8 @@ class MainActivity : AppCompatActivity() {
 
         val viewModel = ViewModelProvider(this,
             ViewModelProvider.NewInstanceFactory()).get(UserViewModel::class.java)
-        viewModel.loadUser(this)
+        //viewModel.getUserFromCache(this)
+        viewModel.getUserFromDatabase(this)
 
     }
 }

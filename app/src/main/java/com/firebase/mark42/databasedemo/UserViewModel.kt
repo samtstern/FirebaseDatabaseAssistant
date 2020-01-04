@@ -10,17 +10,30 @@ import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel() {
 
-    fun loadUser(activity: AppCompatActivity) {
+    fun getUserFromDatabase(activity: AppCompatActivity) {
         val fName = activity.findViewById<TextView>(R.id.firstName)
         val lName = activity.findViewById<TextView>(R.id.lastName)
         val email = activity.findViewById<TextView>(R.id.email)
         val userRepo = UserRepo.getInstance()
         viewModelScope.launch {
-            val user = userRepo.getFromDatabaseCache(UserRepo.path())
-                Log.v("model", user.toString())
+            userRepo.getFromDatabase(UserRepo.path()).observe(activity, Observer { user ->
                 fName.text = user?.firstName
                 lName.text = user?.lastName
                 email.text = user?.email
+            })
+        }
+    }
+
+    fun getUserFromCache(activity: AppCompatActivity) {
+        viewModelScope.launch {
+            val fName = activity.findViewById<TextView>(R.id.firstName)
+            val lName = activity.findViewById<TextView>(R.id.lastName)
+            val email = activity.findViewById<TextView>(R.id.email)
+            val userRepo = UserRepo.getInstance()
+            val user = userRepo.getFromDatabaseCache(UserRepo.path())
+            fName.text = user?.firstName
+            lName.text = user?.lastName
+            email.text = user?.email
         }
     }
 }

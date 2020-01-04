@@ -16,6 +16,6 @@ class UserRepo : DatabaseRepo<User>() {
     }
 
     companion object : DatabaseSingleton<UserRepo>(::UserRepo) {
-        fun path() = "user"
+        fun path() = "user/0"
     }
 }
