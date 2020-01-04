@@ -16,7 +16,7 @@ class UserViewModel : ViewModel() {
         val email = activity.findViewById<TextView>(R.id.email)
         val userRepo = UserRepo.getInstance()
         viewModelScope.launch {
-            userRepo.getFromDatabase("user").observe(activity, Observer { user ->
+            userRepo.getFromDatabase(UserRepo.path()).observe(activity, Observer { user ->
                 Log.v("model", user.toString())
                 fName.text = user?.firstName
                 lName.text = user?.lastName

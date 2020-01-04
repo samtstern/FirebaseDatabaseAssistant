@@ -6,9 +6,6 @@ import com.google.firebase.database.Query
 import java.util.HashMap
 
 internal interface Repo<T> {
-    var cached: T?
-    fun get(): T?
-
     suspend fun getFromDatabaseCache(path: String): T?
     fun getFromDatabase(path: String): LiveData<T?>
     suspend fun pushToDatabase(path: String, t: T): DatabaseResult<Unit>

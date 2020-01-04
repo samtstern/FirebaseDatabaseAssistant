@@ -15,5 +15,7 @@ class UserRepo : DatabaseRepo<User>() {
         return value?.getValue(User::class.java)
     }
 
-    companion object : DatabaseSingleton<UserRepo>(::UserRepo)
+    companion object : DatabaseSingleton<UserRepo>(::UserRepo) {
+        fun path() = "user"
+    }
 }

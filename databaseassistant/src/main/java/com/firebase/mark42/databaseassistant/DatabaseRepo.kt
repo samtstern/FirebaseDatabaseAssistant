@@ -5,16 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.google.firebase.database.DataSnapshot
 import androidx.arch.core.util.Function
+import com.google.firebase.database.Query
+import java.util.HashMap
 
 abstract class DatabaseRepo<T>(): Repo<T> {
 
     private val api = DatabaseApi<T>()
-
-    override var cached: T? = null
-
-    override fun get(): T? {
-        return cached
-    }
 
     override fun getFromDatabase(path: String) : LiveData<T?> {
         val result = api.getFromDatabase(path)
@@ -34,6 +30,41 @@ abstract class DatabaseRepo<T>(): Repo<T> {
     }
 
     override suspend fun postToDatabase(path: String, t: T): DatabaseResult<Unit> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun pushToDatabase(path: String, t: T): DatabaseResult<Unit> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun convertDatabaseSnapshot(snapShot: DataSnapshot): DatabaseResult<T?> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun updateChildToDatabase(
+        path: String,
+        childPath: String,
+        value: Any
+    ): DatabaseResult<Unit> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun updateChildrenToDatabase(
+        path: String,
+        updates: HashMap<String, Any?>
+    ): DatabaseResult<Unit> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun deleteFromDatabase(path: String): DatabaseResult<Unit> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override suspend fun getQueryFromDatabaseCache(query: Query): DatabaseResult<T?> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getQueryFromDatabase(query: Query): LiveData<T?> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
