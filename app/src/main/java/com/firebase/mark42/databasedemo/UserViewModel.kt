@@ -1,18 +1,26 @@
 package com.firebase.mark42.databasedemo
 
+import android.content.Context
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import java.util.HashMap
 
-class UserViewModel : ViewModel() {
+class UserViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return UserViewModel(context) as T
+    }
+}
 
-    val userRepo by lazy {
-        UserRepo.getInstance()
+class UserViewModel(context: Context) : ViewModel() {
+
+    private val userRepo by lazy {
+        UserRepo.getInstance(context)
     }
 
     fun getUserFromDatabase(activity: AppCompatActivity) {
@@ -32,8 +40,7 @@ class UserViewModel : ViewModel() {
             val fName = activity.findViewById<TextView>(R.id.firstName)
             val lName = activity.findViewById<TextView>(R.id.lastName)
             val email = activity.findViewById<TextView>(R.id.email)
-            val user = userRepo.getFromDatabaseCache(
-                UserRepo.userPath("-LxjJXsJdbZiEjjh1A89"))
+            val user = userRepo.getFromDatabaseCache(UserRepo.userPath("-LxjJXsJdbZiEjjh1A89"))
             fName.text = user?.firstName
             lName.text = user?.lastName
             email.text = user?.email

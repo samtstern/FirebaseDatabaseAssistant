@@ -58,19 +58,4 @@ class DatabaseApi<T> {
     fun getQueryFromDatabase(query: Query): LiveData<DatabaseResult<DataSnapshot>> {
         return DatabaseHelper<T>().stream(query = query)
     }
-
-    /*fun <T> convert(cls: Class<T>, snapShot: DataSnapshot): DatabaseResult<T?> {
-        return try {
-
-            val data = snapShot.getValue(cls)
-            DatabaseResult.success(data)
-        } catch (e: Exception) {
-            val message = e.message ?: ""
-            DatabaseResult.failed(message)
-        }
-    }
-
-    inline fun <reified T> convertDatabaseSnapshot(snapShot: DataSnapshot): DatabaseResult<T?> {
-        return convert(T::class.java, snapShot)
-    }*/
 }

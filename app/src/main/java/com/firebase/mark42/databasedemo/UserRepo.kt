@@ -1,5 +1,6 @@
 package com.firebase.mark42.databasedemo
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
@@ -7,15 +8,26 @@ import com.firebase.mark42.databaseassistant.DatabaseRepo
 import com.firebase.mark42.databaseassistant.DatabaseResult
 import com.google.firebase.database.DataSnapshot
 import androidx.arch.core.util.Function
-import com.firebase.mark42.databaseassistant.DatabaseSingleton
 
-class UserRepo : DatabaseRepo<User>() {
+class UserRepo(context: Context) : DatabaseRepo<User>() {
 
     override fun convertDatabaseSnapshot(value: DataSnapshot?): User? {
         return value?.getValue(User::class.java)
     }
 
-    companion object : DatabaseSingleton<UserRepo>(::UserRepo) {
+    /*companion object : DatabaseSingleton<UserRepo>(::UserRepo) {
+        fun userPath(path: String) = "users/$path"
+        fun path() = "users"
+    }*/
+    companion object {
+        private var instance : UserRepo? = null
+
+        fun getInstance(context: Context): UserRepo {
+            if (instance == null)
+                instance = UserRepo(context)
+
+            return instance!!
+        }
         fun userPath(path: String) = "users/$path"
         fun path() = "users"
     }

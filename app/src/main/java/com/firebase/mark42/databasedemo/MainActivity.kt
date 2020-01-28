@@ -3,6 +3,7 @@ package com.firebase.mark42.databasedemo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.firebase.mark42.databaseassistant.DatabaseHelper
 import kotlinx.android.synthetic.main.activity_main.*
@@ -14,24 +15,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val viewModel = ViewModelProvider(this,
-            ViewModelProvider.NewInstanceFactory()).get(UserViewModel::class.java)
+        val userViewModel = ViewModelProvider(this,
+            UserViewModelFactory(this)).get(UserViewModel::class.java)
 
-        val usersViewModel = ViewModelProvider(this,
-            ViewModelProvider.NewInstanceFactory()).get(UsersViewModel::class.java)
-        usersViewModel.getUsersFromCache()
-        //usersViewModel.getUsersFromDatabase(thisquery)
+        /*val usersViewModel = ViewModelProvider(this,
+            ViewModelProvider.NewInstanceFactory()).get(UsersViewModel::class.java)*/
+        //usersViewModel.getUsersFromCache()
+        //usersViewModel.getUsersFromDatabase(this)
         //usersViewModel.queryUsersFromCache()
         //usersViewModel.queryUsersFromDatabase(this)
 
-        //viewModel.getUserFromCache(this)
-        viewModel.getUserFromDatabase(this)
+        userViewModel.getUserFromDatabase(this)
+        //userViewModel.getUserFromCache(this)
 
         button.setOnClickListener {
             //pushUser(viewModel)
             //updateChild(viewModel)
             //updateUser(viewModel)
-            deleteUserField(viewModel)
+            //deleteUserField(viewModel)
         }
     }
 

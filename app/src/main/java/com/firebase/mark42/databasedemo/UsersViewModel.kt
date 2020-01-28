@@ -1,5 +1,6 @@
 package com.firebase.mark42.databasedemo
 
+import android.content.Context
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -9,10 +10,10 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.launch
 
-class UsersViewModel : ViewModel() {
+class UsersViewModel(context: Context) : ViewModel() {
 
     val usersRepo by lazy {
-        UsersRepo.getInstance()
+        UsersRepo.getInstance(context)
     }
 
     fun getUsersFromDatabase(activity: AppCompatActivity) {

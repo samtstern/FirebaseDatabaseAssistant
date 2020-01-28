@@ -1,10 +1,12 @@
-package com.firebase.mark42.databaseassistant
+package com.firebase.mark42.databaseassistant.java
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import com.firebase.mark42.databaseassistant.DatabaseApi
+import com.firebase.mark42.databaseassistant.DatabaseResult
 import com.google.firebase.database.DataSnapshot
+
 import androidx.arch.core.util.Function
-import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.Query
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
@@ -12,7 +14,6 @@ import java.util.HashMap
 import java.util.concurrent.CompletableFuture
 
 abstract class DatabaseRepo<T>(): Repo<T> {
-
     private val api = DatabaseApi<T>()
 
     override fun getFromDatabase(path: String) : LiveData<T?> {
@@ -27,37 +28,44 @@ abstract class DatabaseRepo<T>(): Repo<T> {
         return Transformations.map(result, function)
     }
 
-    override suspend fun getFromDatabaseCache(path: String): T? {
-        val result = api.getFromDatabaseCache(path)
-        return convertDatabaseSnapshot(result.value)
-    }
+    override fun getFromDatabaseCache(path: String) : CompletableFuture<T?> =
+        GlobalScope.future {
+            val result = api.getFromDatabaseCache(path)
+            convertDatabaseSnapshot(result.value)
+        }
 
-    override suspend fun pushToDatabase(path: String, t: T): String? {
-        return api.pushToDatabase(path, t)
-    }
+    override fun pushToDatabase(path: String, t: T): CompletableFuture<String?> =
+        GlobalScope.future {
+            api.pushToDatabase(path, t)
+        }
 
-    override suspend fun updateChildToDatabase(
+
+    override fun updateChildToDatabase(
         path: String,
         value: Any
-    ): DatabaseResult<Unit> {
-        return api.updateChildToDatabase(path, value)
-    }
+    ): CompletableFuture<DatabaseResult<Unit>> =
+        GlobalScope.future {
+            api.updateChildToDatabase(path, value)
+        }
 
-    override suspend fun updateChildrenToDatabase(
+    override fun updateChildrenToDatabase(
         path: String,
         updates: HashMap<String, Any?>
-    ): DatabaseResult<Unit> {
-        return api.updateChildrenToDatabase(path, updates)
-    }
+    ): CompletableFuture<DatabaseResult<Unit>> =
+        GlobalScope.future {
+            api.updateChildrenToDatabase(path, updates)
+        }
 
-    override suspend fun deleteFromDatabase(path: String): DatabaseResult<Unit> {
-        return api.deleteFromDatabase(path)
-    }
+    override fun deleteFromDatabase(path: String): CompletableFuture<DatabaseResult<Unit>> =
+        GlobalScope.future {
+            api.deleteFromDatabase(path)
+        }
 
-    override suspend fun getQueryFromDatabaseCache(query: Query): T? {
-        val result = api.getQueryFromDatabaseCache(query)
-        return convertDatabaseSnapshot(result.value)
-    }
+    override fun getQueryFromDatabaseCache(query: Query) : CompletableFuture<T?> =
+        GlobalScope.future {
+            val result = api.getQueryFromDatabaseCache(query)
+            convertDatabaseSnapshot(result.value)
+        }
 
     override fun getQueryFromDatabase(query: Query): LiveData<T?> {
         val result = api.getQueryFromDatabase(query)
