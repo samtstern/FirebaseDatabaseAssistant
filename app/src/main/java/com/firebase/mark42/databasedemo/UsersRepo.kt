@@ -18,10 +18,6 @@ class UsersRepo(context: Context) : DatabaseRepo<List<User>>() {
         return users
     }
 
-    /*companion object : DatabaseSingleton<UsersRepo>(::UsersRepo) {
-        fun path() = "users"
-    }*/
-
     companion object {
         private var instance : UsersRepo? = null
 

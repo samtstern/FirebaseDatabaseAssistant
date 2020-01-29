@@ -6,20 +6,27 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.launch
 
+class UsersViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return UsersViewModel(context) as T
+    }
+}
+
 class UsersViewModel(context: Context) : ViewModel() {
 
-    val usersRepo by lazy {
+    private val usersRepo by lazy {
         UsersRepo.getInstance(context)
     }
 
     fun getUsersFromDatabase(activity: AppCompatActivity) {
         usersRepo.getFromDatabase(UsersRepo.path()).observe(activity, Observer { users ->
             users?.forEach {
-                Log.v("userFirstName", it.firstName)
+                // update your adapter
             }
         })
     }
@@ -28,7 +35,7 @@ class UsersViewModel(context: Context) : ViewModel() {
         viewModelScope.launch {
             val users = usersRepo.getFromDatabaseCache(UsersRepo.path())
             users?.forEach {
-                Log.v("userFirstName2", it.firstName)
+                // update your adapter
             }
         }
     }
@@ -38,7 +45,7 @@ class UsersViewModel(context: Context) : ViewModel() {
             .orderByKey().limitToLast(2)
         usersRepo.getQueryFromDatabase(query).observe(activity, Observer { users ->
             users?.forEach {
-                Log.v("queryUserFirstName", it.firstName)
+                // update your adapter
             }
         })
     }
@@ -49,7 +56,7 @@ class UsersViewModel(context: Context) : ViewModel() {
                 .orderByKey().limitToLast(2)
             val users = usersRepo.getQueryFromDatabaseCache(query)
             users?.forEach {
-                Log.v("queryUserFirstName2", it.firstName)
+                // update your adapter
             }
         }
     }

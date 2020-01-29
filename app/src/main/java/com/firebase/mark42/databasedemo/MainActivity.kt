@@ -2,6 +2,7 @@ package com.firebase.mark42.databasedemo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,21 +19,21 @@ class MainActivity : AppCompatActivity() {
         val userViewModel = ViewModelProvider(this,
             UserViewModelFactory(this)).get(UserViewModel::class.java)
 
-        /*val usersViewModel = ViewModelProvider(this,
-            ViewModelProvider.NewInstanceFactory()).get(UsersViewModel::class.java)*/
+        val usersViewModel = ViewModelProvider(this,
+            UsersViewModelFactory(this)).get(UsersViewModel::class.java)
         //usersViewModel.getUsersFromCache()
         //usersViewModel.getUsersFromDatabase(this)
         //usersViewModel.queryUsersFromCache()
         //usersViewModel.queryUsersFromDatabase(this)
 
-        userViewModel.getUserFromDatabase(this)
+        //userViewModel.getUserFromDatabase(this)
         //userViewModel.getUserFromCache(this)
 
         button.setOnClickListener {
-            //pushUser(viewModel)
-            //updateChild(viewModel)
-            //updateUser(viewModel)
-            //deleteUserField(viewModel)
+            //pushUser(userViewModel)
+            //updateChild(userViewModel)
+            //updateUser(userViewModel)
+            //deleteUserField(userViewModel)
         }
     }
 

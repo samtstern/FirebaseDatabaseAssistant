@@ -27,8 +27,7 @@ class UserViewModel(context: Context) : ViewModel() {
         val fName = activity.findViewById<TextView>(R.id.firstName)
         val lName = activity.findViewById<TextView>(R.id.lastName)
         val email = activity.findViewById<TextView>(R.id.email)
-        userRepo.getFromDatabase(UserRepo.userPath("-LxjJXsJdbZiEjjh1A89"))
-            .observe(activity, Observer { user ->
+        userRepo.getFromDatabase(UserRepo.userPath("-LxjJXsJdbZiEjjh1A89")).observe(activity, Observer { user ->
             fName.text = user?.firstName
             lName.text = user?.lastName
             email.text = user?.email
@@ -49,8 +48,10 @@ class UserViewModel(context: Context) : ViewModel() {
 
     fun pushUserToDatabase(user: User) {
         viewModelScope.launch {
-            val value = userRepo.pushToDatabase(UserRepo.path(), user)
-            user.userPushId = value
+            //it return the firebase push id key
+            val key = userRepo.pushToDatabase(UserRepo.path(), user)
+            user.userPushId = key
+            // show confirmation message to user
         }
     }
 
@@ -62,20 +63,21 @@ class UserViewModel(context: Context) : ViewModel() {
                 //Display success message
             } else {
                 //Display error message
-                //result.errorMessage
+                result.errorMessage
             }
         }
     }
 
     fun updateUserToDatabase(updates: HashMap<String, Any?>) {
         viewModelScope.launch {
+            //if path is null then it'll create a new node
             val result = userRepo.updateChildrenToDatabase(UserRepo.userPath(
-                "-LxjLLWT2dtamozS2OIX"), updates)
+                "-LzhYTCGOOYIQt1uOq7B"), updates)
             if (result.isSuccess()) {
                 //Display success message
             } else {
                 //Display error message
-                //result.errorMessage
+                result.errorMessage
             }
         }
     }
@@ -83,12 +85,12 @@ class UserViewModel(context: Context) : ViewModel() {
     fun deleteFromDatabase() {
         viewModelScope.launch {
             val result = userRepo.deleteFromDatabase(UserRepo.userPath(
-                "-LxjLLWT2dtamozS2OIX/" + DATABASE_KEY.USER.email))
+                "-LzhYTCGOOYIQt1uOq7B/" + DATABASE_KEY.USER.email))
             if (result.isSuccess()) {
                 //Display success message
             } else {
                 //Display error message
-                //result.errorMessage
+                result.errorMessage
             }
         }
     }
