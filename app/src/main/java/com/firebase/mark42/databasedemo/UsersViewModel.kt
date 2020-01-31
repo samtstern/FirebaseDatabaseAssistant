@@ -11,16 +11,10 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.launch
 
-class UsersViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return UsersViewModel(context) as T
-    }
-}
-
-class UsersViewModel(context: Context) : ViewModel() {
+class UsersViewModel : ViewModel() {
 
     private val usersRepo by lazy {
-        UsersRepo.getInstance(context)
+        UsersRepo.getInstance()
     }
 
     fun getUsersFromDatabase(activity: AppCompatActivity) {

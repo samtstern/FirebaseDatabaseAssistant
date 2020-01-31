@@ -4,7 +4,7 @@ import android.content.Context
 import com.firebase.mark42.databaseassistant.DatabaseRepo
 import com.google.firebase.database.DataSnapshot
 
-class UsersRepo(context: Context) : DatabaseRepo<List<User>>() {
+class UsersRepo : DatabaseRepo<List<User>>() {
     override fun convertDatabaseSnapshot(value: DataSnapshot?): List<User>? {
         val users = value?.children?.map {
             try {
@@ -21,9 +21,9 @@ class UsersRepo(context: Context) : DatabaseRepo<List<User>>() {
     companion object {
         private var instance : UsersRepo? = null
 
-        fun getInstance(context: Context): UsersRepo {
+        fun getInstance(): UsersRepo {
             if (instance == null)
-                instance = UsersRepo(context)
+                instance = UsersRepo()
 
             return instance!!
         }

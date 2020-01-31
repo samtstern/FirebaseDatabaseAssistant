@@ -11,16 +11,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import java.util.HashMap
 
-class UserViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return UserViewModel(context) as T
-    }
-}
-
-class UserViewModel(context: Context) : ViewModel() {
+class UserViewModel : ViewModel() {
 
     private val userRepo by lazy {
-        UserRepo.getInstance(context)
+        UserRepo.getInstance()
     }
 
     fun getUserFromDatabase(activity: AppCompatActivity) {

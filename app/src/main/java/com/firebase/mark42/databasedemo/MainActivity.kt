@@ -16,11 +16,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val userViewModel = ViewModelProvider(this,
-            UserViewModelFactory(this)).get(UserViewModel::class.java)
+        val userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-        val usersViewModel = ViewModelProvider(this,
-            UsersViewModelFactory(this)).get(UsersViewModel::class.java)
+        val usersViewModel = ViewModelProvider(this).get(UsersViewModel::class.java)
         //usersViewModel.getUsersFromCache()
         //usersViewModel.getUsersFromDatabase(this)
         //usersViewModel.queryUsersFromCache()

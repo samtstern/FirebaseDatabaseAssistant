@@ -9,7 +9,7 @@ import com.firebase.mark42.databaseassistant.DatabaseResult
 import com.google.firebase.database.DataSnapshot
 import androidx.arch.core.util.Function
 
-class UserRepo(context: Context) : DatabaseRepo<User>() {
+class UserRepo : DatabaseRepo<User>() {
 
     override fun convertDatabaseSnapshot(value: DataSnapshot?): User? {
         return value?.getValue(User::class.java)
@@ -18,9 +18,9 @@ class UserRepo(context: Context) : DatabaseRepo<User>() {
     companion object {
         private var instance : UserRepo? = null
 
-        fun getInstance(context: Context): UserRepo {
+        fun getInstance(): UserRepo {
             if (instance == null)
-                instance = UserRepo(context)
+                instance = UserRepo()
 
             return instance!!
         }
