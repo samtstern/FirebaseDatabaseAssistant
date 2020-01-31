@@ -375,7 +375,7 @@ public class UserViewModel extends ViewModel {
 
 For more detail refer to [UserViewModel.java](https://github.com/Im-Mark42/FirebaseDatabaseAssistant/blob/master/app/src/main/java/com/firebase/mark42/databasedemo/java/UserViewModel.java)
 
-* Initialize `ViewModel` class in your `activity` class and implement above methods.
+* Initialize `ViewModel` class in your `activity` class and call above methods.
 ```
 val viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 ```
@@ -383,7 +383,6 @@ For more detail refer to [MainActivity.kt](https://github.com/Im-Mark42/Firebase
 
 **Java User**
 
-* Initialize `ViewModel` class in your `activity` class and implement above methods.
 ```
 final UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 ```
@@ -604,13 +603,12 @@ fun queryUsersFromDatabase(activity: AppCompatActivity) {
  }
  ```
  
-* Initialize `ViewModel` class in your `activity` class and implement above methods
+* Initialize `ViewModel` class in your `activity` class and call above methods
 ```
 val usersViewModel = ViewModelProvider(this).get(UsersViewModel::class.java)
 ```
 **Java User**
 
-* Initialize `ViewModel` class in your `activity` class and implement above methods.
 ```
 final UsersViewModel usersViewModel = new ViewModelProvider(this).get(UsersViewModel.class);
 ```
