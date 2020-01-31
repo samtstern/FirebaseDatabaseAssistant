@@ -129,7 +129,7 @@ public class User {
     }
 
     @PropertyName(DATABASE_KEY.USER.firstName)
-    public String setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstname;
     }
 
@@ -139,7 +139,7 @@ public class User {
     }
     
     @PropertyName(DATABASE_KEY.USER.lastName)
-    public String setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
     
@@ -149,7 +149,7 @@ public class User {
     }
     
     @PropertyName(DATABASE_KEY.USER.email)
-    public String setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 }
