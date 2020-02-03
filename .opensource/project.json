@@ -11,5 +11,5 @@
 		"app/README.md": "Demo App"
 	},
 	
-	"related": ["firebase/firebase-realtime-database"]
+	"related": ["firebase/firebase-android-sdk"]
 }
